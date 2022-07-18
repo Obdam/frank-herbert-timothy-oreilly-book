@@ -15,14 +15,26 @@ if __name__ == '__main__':
     book.set_cover("image.jpg", open(
         'images/frank-herbert-cover-230x346.jpg', 'rb').read())
 
-    c1 = epub.EpubHtml(
-        title='Introduction: How I Came to Write Frank Herbert',
-        file_name='contents/chapter_01.xhtml',
-        lang='en')
+    def generate_chapter(file, title):
+        chapter = epub.EpubHtml(
+            title=title,
+            file_name='{}.xhtml'.format(file),
+            lang='en')
 
-    c2 = epub.EpubItem()
-    # c1.content = u'<html><head></head><body><h1>Introduction</h1><p>Introduction paragraph where i explain what is happening.</p></body></html>'
-    book.add_item(c1)
+        filename = 'contents/' + file + '.xhtml'
+        chapter_file = open(filename, "r")
+
+        chapter.set_content(chapter_file.read())
+        
+        print(chapter)
+
+
+        book.add_item(chapter)
+    
+    chapters = [{'file': 'chapter_01', 'title': 'Introduction: How I Came to Write Frank Herbert'}]
+
+    for section in chapters:
+        generate_chapter(section['file'], section['title'])
 
     epub.write_epub('boekie.epub', book)
     # print(c1.get_content())
