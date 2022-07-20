@@ -2,7 +2,6 @@
 
 from ebooklib import epub
 
-
 if __name__ == '__main__':
     book = epub.EpubBook()
 
