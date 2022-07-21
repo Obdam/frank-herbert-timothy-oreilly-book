@@ -15,26 +15,44 @@ if __name__ == '__main__':
     book.set_cover("image.jpg", open(
         'images/frank-herbert-cover-230x346.jpg', 'rb').read())
 
-    def generate_chapter(file, title):
-        filename = 'contents/' + file + '.xhtml'
-        chapter = epub.EpubHtml(
-            title=title,
-            file_name=filename,
-            lang='en')
+    c1 = epub.EpubHtml(title='Acknowledgements',
+                       file_name='contents/chapter_01.xhtml')
+    c1.content = open('contents/chapter_01.xhtml', "r").read()
+    c1.set_language('en')
 
-        chapter_file = open(filename, "r")
-        chapter.content = chapter_file.read()
+    c2 = epub.EpubHtml(title='Introduction: How I Came to Write Frank Herbert',
+                       file_name='contents/chapter_02.xhtml')
+    c2.content = open('contents/chapter_02.xhtml', "r").read()
+    c2.set_language('en')
 
-        book.add_item(chapter)
+    c3 = epub.EpubHtml(title='Preface',
+                       file_name='contents/chapter_03.xhtml')
+    c3.content = open('contents/chapter_03.xhtml', "r").read()
+    c3.set_language('en')
 
-    chapters = [{'file': 'chapter_01',
-                 'title': 'Introduction: How I Came to Write Frank Herbert'}]
+    c4 = epub.EpubHtml(title='Chapter 1: Dancing on the Edge',
+                       file_name='contents/chapter_04.xhtml')
+    c4.content = open('contents/chapter_04.xhtml', "r").read()
+    c4.set_language('en')
 
-    for section in chapters:
-        generate_chapter(section['file'], section['title'])
+    book.add_item(c1)
+    book.add_item(c2)
+    book.add_item(c3)
+    book.add_item(c4)
+
+    book.toc = [(epub.Section('Introduction'), (c1, c2, c3)),
+                (epub.Section('Chapters'), (c1, c2, c3))]
+    #c5,c6,c7,c8,c9,c10,c11,c12,c13,c14
 
     book.add_item(epub.EpubNcx())
     book.add_item(epub.EpubNav())
 
+    style = open('stylesheets/stylesheet.css', "r").read()
+
+    book_css = epub.EpubItem(
+        uid="book_style", file_name="stylesheets/stylesheet.css", media_type="text/css", content=style)
+    book.add_item(book_css)
+
+    book.spine = ['cover', c1, 'nav', c2, c3, c4]
+
     epub.write_epub('boekie.epub', book)
-    # print(c1.get_content())
