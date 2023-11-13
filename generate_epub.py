@@ -49,4 +49,4 @@ book.add_item(epub.EpubNcx())
 book.add_item(epub.EpubNav())
 
 # Write the epub file
-epub.write_epub('mybook.epub', book, {})
+epub.write_epub('frank_herbert_timothy_oreilly.epub', book, {})
